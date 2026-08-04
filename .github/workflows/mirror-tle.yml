@@ -50,10 +50,13 @@ jobs:
           set -u
           UA='DotsInTheSky-mirror/1.0 (+https://github.com/pinaltieri/dotsinthesky)'
           LIVE='https://pinaltieri.github.io/dotsinthesky/tle'
-          GROUPS='stations visual weather resource science analyst sarsat amateur gnss oneweb starlink active'
+          # NON chiamarla GROUPS: è un array riservato di bash (i GID dell'utente).
+          # L'assegnazione viene ignorata senza errori e $GROUPS espande a un GID,
+          # così il ciclo gira una volta sola su un "gruppo" numerico inesistente.
+          TLE_GROUPS='stations visual weather resource science analyst sarsat amateur gnss oneweb starlink active'
           freschi=0; conservati=0; mancanti=0
 
-          for g in $GROUPS; do
+          for g in $TLE_GROUPS; do
             out="site/tle/$g.txt"
             tmp="$(mktemp)"
             code="$(curl -sS -A "$UA" --max-time 180 -o "$tmp" -w '%{http_code}' \
