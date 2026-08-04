@@ -1,0 +1,120 @@
+name: Mirror TLE + pubblicazione sito
+
+# Pubblica su GitHub Pages la privacy policy (index.html) e un mirror giornaliero
+# dei gruppi orbitali di Celestrak sotto /tle/.
+#
+# Perché esiste: Celestrak risponde HTTP 403 a chi ha già scaricato lo stesso
+# gruppo nelle ultime 2 ore. Con il CGNAT degli operatori mobili molti utenti
+# condividono lo stesso IP pubblico, quindi un utente al PRIMO avvio può trovare
+# il catalogo vuoto pur non avendo mai scaricato nulla. Questo mirror non applica
+# throttling e l'app ci ripiega quando Celestrak tace (SatelliteService.MIRROR_BASE).
+#
+# I file TLE NON vengono committati: il deploy avviene da artefatto, così
+# active.txt (~3,4 MB, riscritto per intero ogni giorno) non gonfia il repository.
+
+on:
+  schedule:
+    # 04:17 UTC. Celestrak aggiorna ogni 2h, una volta al giorno è più che sufficiente
+    # per restare entro l'accuratezza utile di SGP4.
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore: ['.keepalive']
+
+permissions:
+  contents: write      # serve solo per il commit di .keepalive (vedi ultimo step)
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara il sito
+        run: |
+          mkdir -p site/tle
+          cp index.html site/
+
+      - name: Scarica i gruppi TLE da Celestrak
+        run: |
+          set -u
+          UA='DotsInTheSky-mirror/1.0 (+https://github.com/pinaltieri/dotsinthesky)'
+          LIVE='https://pinaltieri.github.io/dotsinthesky/tle'
+          GROUPS='stations visual weather resource science analyst sarsat amateur gnss oneweb starlink active'
+          freschi=0; conservati=0; mancanti=0
+
+          for g in $GROUPS; do
+            out="site/tle/$g.txt"
+            tmp="$(mktemp)"
+            code="$(curl -sS -A "$UA" --max-time 180 -o "$tmp" -w '%{http_code}' \
+                    "https://celestrak.org/NORAD/elements/gp.php?GROUP=$g&FORMAT=TLE" || echo 000)"
+
+            # Un 200 non basta: va verificato che il corpo sia davvero TLE e non
+            # una pagina di errore, altrimenti si pubblicherebbe spazzatura.
+            n="$(grep -c '^1 ' "$tmp" || true)"
+
+            if [ "$code" = "200" ] && [ "$n" -gt 0 ]; then
+              mv "$tmp" "$out"
+              echo "$g: $n TLE freschi da Celestrak"
+              freschi=$((freschi+1))
+              continue
+            fi
+
+            # Celestrak muto (403 della finestra anti-abuso, rete, risposta non-TLE):
+            # si recupera la copia già pubblicata sul sito. Il mirror si autoalimenta,
+            # così un 403 occasionale non fa sparire un gruppo.
+            if curl -sS -f --max-time 120 -o "$tmp" "$LIVE/$g.txt"; then
+              m="$(grep -c '^1 ' "$tmp" || true)"
+              if [ "$m" -gt 0 ]; then
+                mv "$tmp" "$out"
+                echo "$g: HTTP $code da Celestrak, conservati $m TLE già pubblicati"
+                conservati=$((conservati+1))
+                continue
+              fi
+            fi
+
+            rm -f "$tmp"
+            echo "$g: HTTP $code da Celestrak e nessuna copia pubblicata, gruppo assente"
+            mancanti=$((mancanti+1))
+          done
+
+          date -u +'%Y-%m-%dT%H:%M:%SZ' > site/tle/updated.txt
+          echo "Riepilogo: $freschi freschi, $conservati conservati, $mancanti mancanti"
+
+          # Pubblicare un sito senza alcun gruppo cancellerebbe il mirror esistente.
+          if [ "$((freschi+conservati))" -eq 0 ]; then
+            echo "Nessun gruppo disponibile: interrompo senza pubblicare."
+            exit 1
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      # GitHub disattiva i workflow pianificati dopo 60 giorni SENZA attività nel
+      # repository, e le esecuzioni non contano come attività: il deploy da artefatto
+      # non scrive nulla, quindi senza questo commit il mirror smetterebbe di
+      # aggiornarsi in silenzio dopo due mesi. Il file contiene una sola riga.
+      - name: Mantieni attiva la pianificazione
+        run: |
+          date -u +'%Y-%m-%dT%H:%M:%SZ' > .keepalive
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .keepalive
+          git commit -m 'keepalive: mantiene attivo il cron del mirror TLE' || exit 0
+          git push
