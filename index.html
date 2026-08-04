@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informativa privacy — Dots in the Sky</title>
+<style>
+  /* Neutri con lieve bias verde (l'accento dell'app è il verde "scope"). */
+  :root {
+    --bg:#fbfcfb; --fg:#18201b; --dim:#5a655d; --line:#dde5df;
+    --accent:#0b7a3b; --panel:#f2f6f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e110f; --fg:#e6ebe7; --dim:#93a096; --line:#242a26;
+            --accent:#5bd68a; --panel:#161a17; }
+  }
+
+  * { box-sizing:border-box; }
+  body { color:var(--fg); background:var(--bg);
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         line-height:1.62; max-width:720px; margin:0 auto; padding:56px 22px 80px;
+         -webkit-font-smoothing:antialiased; }
+  .eyebrow { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+             color:var(--accent); font-weight:600; margin:0 0 10px; }
+  h1 { font-size:1.7rem; line-height:1.2; text-wrap:balance; margin:0 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:1.12rem; margin:40px 0 10px; padding-top:22px; border-top:1px solid var(--line); }
+  p, li { max-width:65ch; }
+  .updated { color:var(--dim); font-size:.88rem; margin:0 0 4px;
+             font-variant-numeric:tabular-nums; }
+  .lang { display:block; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+          color:var(--dim); margin:0 0 6px; }
+  a { color:var(--accent); text-decoration:underline; text-underline-offset:2px;
+      text-decoration-thickness:1px; }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+  ul { padding-left:18px; }
+  li { margin:5px 0; }
+  code { background:var(--panel); padding:1px 6px; border-radius:5px; font-size:.86em; }
+  hr { border:none; border-top:2px solid var(--line); margin:52px 0 44px; }
+</style>
+</head>
+<body>
+
+<p class="eyebrow">Dots in the Sky</p>
+<h1>Informativa sulla privacy</h1>
+<p class="updated">Ultimo aggiornamento: 16 luglio 2026</p>
+
+<p>Questa informativa descrive come l'applicazione <strong>Dots in the Sky</strong>
+(pacchetto <code>it.pinaltieri.satellitetracker</code>) tratta i dati. L'app è
+sviluppata da un privato ed è un progetto indipendente e non commerciale.</p>
+
+<h2>In breve</h2>
+<ul>
+  <li>Non creiamo alcun account e non ti chiediamo dati personali.</li>
+  <li>Non usiamo pubblicità, analitiche, né strumenti di tracciamento di terze parti.</li>
+  <li>Non conserviamo la tua posizione sui nostri server: non abbiamo server.</li>
+  <li>La fotocamera è usata solo per la vista in realtà aumentata, in tempo reale; nessuna immagine viene salvata o inviata.</li>
+</ul>
+
+<h2>Posizione</h2>
+<p>L'app usa la tua posizione per calcolare quali satelliti e aerei si trovano
+sopra di te. La posizione è ottenuta dal GPS del dispositivo oppure, se non
+disponibile, stimata dal tuo indirizzo IP tramite i servizi
+<a href="https://ipwho.is/">ipwho.is</a> e <a href="https://ipapi.co/">ipapi.co</a>.</p>
+<p>Per mostrare gli aerei nelle vicinanze, le tue <strong>coordinate approssimative</strong>
+vengono inviate ai servizi pubblici di dati ADS-B
+(<a href="https://adsb.fi/">adsb.fi</a>, <a href="https://adsb.lol/">adsb.lol</a>,
+<a href="https://airplanes.live/">airplanes.live</a>), che restituiscono i voli
+in quell'area. La posizione non è associata alla tua identità, non viene registrata
+dall'app né conservata dopo l'uso.</p>
+
+<h2>Fotocamera</h2>
+<p>Il permesso fotocamera è usato esclusivamente per la modalità "punta il cielo"
+(realtà aumentata): l'immagine dal vivo serve solo a sovrapporre satelliti e aerei
+alla scena. Non viene scattata, registrata, salvata né trasmessa alcuna immagine.
+Il permesso è facoltativo: l'app funziona anche senza.</p>
+
+<h2>Sensore magnetico</h2>
+<p>Il rilevatore EMF, se attivato, legge il magnetometro del dispositivo per mostrare
+il campo magnetico locale. Il dato resta sul dispositivo e non viene inviato da nessuna parte.</p>
+
+<h2>Servizi di terze parti</h2>
+<p>L'app recupera dati da fonti pubbliche esterne. Ciascuna ha una propria informativa
+sulla privacy:</p>
+<ul>
+  <li>Dati orbitali dei satelliti: <a href="https://celestrak.org/">Celestrak</a>, <a href="https://mmccants.org/">Mike McCants</a></li>
+  <li>Aerei (ADS-B): adsb.fi, adsb.lol, airplanes.live</li>
+  <li>Avvistamenti UFO: <a href="https://nuforc.org/">NUFORC</a>, UFO Stalker</li>
+  <li>Mappe e geocodifica: <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, Nominatim, Carto, ArcGIS</li>
+  <li>Schede informative: <a href="https://www.wikipedia.org/">Wikipedia</a></li>
+  <li>Traduzione dei testi informativi: Google Translate</li>
+  <li>Immagini radar meteo: RainViewer</li>
+</ul>
+<p>Quando l'app contatta questi servizi, il tuo indirizzo IP è visibile al servizio,
+come per qualsiasi richiesta di rete. Non condividiamo con loro alcun altro dato al di
+fuori di quanto necessario alla singola richiesta (per gli ADS-B, le coordinate della zona).</p>
+
+<h2>Minori</h2>
+<p>L'app non è rivolta ai bambini e non raccoglie consapevolmente dati da minori.</p>
+
+<h2>Modifiche</h2>
+<p>Eventuali modifiche a questa informativa saranno pubblicate su questa pagina,
+con aggiornamento della data in alto.</p>
+
+<h2>Contatti</h2>
+<p>Per domande su questa informativa: <a href="mailto:pinaltieri@gmail.com">pinaltieri@gmail.com</a></p>
+
+<hr>
+
+<p class="lang">English version</p>
+<p class="eyebrow">Dots in the Sky</p>
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: 16 July 2026</p>
+
+<p>This policy describes how the <strong>Dots in the Sky</strong> app
+(package <code>it.pinaltieri.satellitetracker</code>) handles data. The app is
+built by an individual developer as an independent, non-commercial project.</p>
+
+<h2>In short</h2>
+<ul>
+  <li>No account is created and we never ask for personal data.</li>
+  <li>No advertising, analytics, or third-party tracking.</li>
+  <li>We do not store your location on our servers — we have no servers.</li>
+  <li>The camera is used only for the live augmented-reality view; no image is saved or sent.</li>
+</ul>
+
+<h2>Location</h2>
+<p>The app uses your location to compute which satellites and aircraft are above you.
+Location comes from the device GPS or, when unavailable, is estimated from your IP
+address via <a href="https://ipwho.is/">ipwho.is</a> and <a href="https://ipapi.co/">ipapi.co</a>.</p>
+<p>To show nearby aircraft, your <strong>approximate coordinates</strong> are sent to
+public ADS-B data services (<a href="https://adsb.fi/">adsb.fi</a>,
+<a href="https://adsb.lol/">adsb.lol</a>, <a href="https://airplanes.live/">airplanes.live</a>),
+which return flights in that area. Location is not tied to your identity, not logged by
+the app, and not retained after use.</p>
+
+<h2>Camera</h2>
+<p>The camera permission is used solely for the "point at the sky" augmented-reality
+mode: the live image only serves to overlay satellites and aircraft onto the scene.
+No image is captured, recorded, saved, or transmitted. The permission is optional;
+the app works without it.</p>
+
+<h2>Magnetometer</h2>
+<p>The EMF detector, when enabled, reads the device magnetometer to display the local
+magnetic field. This data stays on the device and is never sent anywhere.</p>
+
+<h2>Third-party services</h2>
+<p>The app fetches data from public external sources, each with its own privacy policy:
+Celestrak and Mike McCants (satellite orbital data); adsb.fi, adsb.lol, airplanes.live
+(aircraft); NUFORC and UFO Stalker (UFO sightings); OpenStreetMap, Nominatim, Carto,
+ArcGIS (maps and geocoding); Wikipedia (info cards); Google Translate (translation of
+info text); RainViewer (weather radar imagery). When the app contacts these services,
+your IP address is visible to them, as with any network request. We share no other data
+beyond what each request requires (for ADS-B, the area coordinates).</p>
+
+<h2>Children</h2>
+<p>The app is not directed to children and does not knowingly collect data from minors.</p>
+
+<h2>Changes</h2>
+<p>Any changes to this policy will be posted on this page, with the date above updated.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy: <a href="mailto:pinaltieri@gmail.com">pinaltieri@gmail.com</a></p>
+
+</body>
+</html>
